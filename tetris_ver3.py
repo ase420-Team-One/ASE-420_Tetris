@@ -320,6 +320,8 @@ class Tetris:
             if self._clock.ready_to_drop() or self._pressing_down:
                 Operators.go_down(self._current_mino, self._board)
                 self.game_over_check()
+
+            self.check_for_quit()
             
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
@@ -341,6 +343,10 @@ class Tetris:
                     self._pressing_down = False
             self.update_screen()
 
+    def check_for_quit(self):
+        if (pygame.event.peek(eventtype=pygame.QUIT)):
+            pygame.quit()
+
     # Game over stuff
     def game_over(self):
         self._screen.add_text(font_type='Calibri', font_size=65, text="Game Over", render_bool=True, color=(255, 125, 0),
@@ -349,6 +355,10 @@ class Tetris:
                         appearance_range=[25, 265])
 
         while True:
+            self.check_for_quit()
+            # TODO may be able to extract the following into a method similar to check for quit?
+                # If so, Maybe consolidate those into a method that takes an event type and function
+                # checks for the event, and executes the function if its found in the stack. Could be extrapolated for moves as well.
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == self._controls.quit:
                     pygame.quit()
