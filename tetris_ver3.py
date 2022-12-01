@@ -1,44 +1,11 @@
 import pygame
 from colors import Colors
 from polyominoes import Tetrimino
-
-class Operators:
-    def rotate(tetrimino, board):
-        old_val = tetrimino.rotation
-        tetrimino.rotation += 1
-        if board.intersects(tetrimino):
-            tetrimino.rotation = old_val
-
-    def go_left(tetrimino, board):
-        old_val = tetrimino.shift_x
-        tetrimino.shift_x -= 1
-        if board.intersects(tetrimino):
-            tetrimino.shift_x = old_val
-
-    def go_right(tetrimino, board):
-        old_val = tetrimino.shift_x
-        tetrimino.shift_x += 1
-        if board.intersects(tetrimino):
-            tetrimino.shift_x = old_val
-
-    def go_down(tetrimino, board):
-        old_val = tetrimino.shift_y
-        tetrimino.shift_y += 1
-        if (board.intersects(tetrimino)):
-            tetrimino.shift_y = old_val
-            board.freeze(tetrimino)
-            tetrimino.newMino()
-
-    def drop(tetrimino, board):
-        while not board.intersects(tetrimino):
-            tetrimino.shift_y += 1
-        tetrimino.shift_y -= 1
-        board.freeze(tetrimino)
-        tetrimino.newMino() 
+from operators import Operators
 
 class Board:
     _field = []
-    # _height, _width, _grid_square_sise, _coordinate_on_screen
+    # _height, _width, _grid_square_size, _coordinate_on_screen
 
     def __init__(self, num_rows = 20, num_columns = 10, grid_square_size = 20, coordinate_on_screen = (0,0),colors=Colors()):
         self._height = num_rows
@@ -178,11 +145,14 @@ class Tetris_Clock:
 
     def __init__(self, fps = 25):
         self._fps = fps
+        self._stop = False
 
     def tick(self):
-        self._clock.tick(self._fps)
-        #always drops to 0 at appropriate time
-        self._counter = (self._counter + 1) % (self._fps // 2)
+        if not self._stop:
+            self._clock.tick(self._fps)
+            #always drops to 0 at appropriate time
+            self._counter = (self._counter + 1) % (self._fps // 2)
+    def stop(self): self._stop=True
 
     def ready_to_drop(self):
         return self._counter == 0
@@ -191,17 +161,20 @@ class Controls:
     def default(): 
         return Control_Scheme( down = pygame.K_DOWN, 
                                 left = pygame.K_LEFT, right=pygame.K_RIGHT,
-                                drop = pygame.K_SPACE, rotate = pygame.K_UP,
-                                quit = pygame.K_q)
+                                drop = pygame.K_SPACE, rotatePrimary = pygame.K_UP,
+                                quit = pygame.K_q, rotateCounter = pygame.K_a,
+                                rotateSecondary= pygame.K_d)
 
 class Control_Scheme:
-    def __init__(self, down, left, right, drop, rotate, quit):
+    def __init__(self, down, left, right, drop, rotatePrimary, quit,rotateSecondary, rotateCounter):
         self._down = down
         self._left = left
         self._right = right
         self._drop = drop
-        self._rotate = rotate
+        self._rotate = rotatePrimary
         self._quit = quit
+        self._rotateSecondary = rotateSecondary
+        self._rotateCounter = rotateCounter
 
     @property
     def rotate(self): return self._rotate
@@ -215,6 +188,10 @@ class Control_Scheme:
     def drop(self): return self._drop
     @property
     def quit(self): return self._quit
+    @property
+    def rotateSecondary(self): return self._rotateSecondary
+    @property
+    def rotateCounter(self): return self._rotateCounter
 
 class Tetris:
     # _clock, _screen, _board, _controls
@@ -242,6 +219,10 @@ class Tetris:
                     match event.key:
                         case self._controls.rotate:
                             Operators.rotate(self._current_mino, self._board)
+                        case self._controls.rotateSecondary:
+                            Operators.rotate(self._current_mino, self._board)
+                        case self._controls.rotateCounter:
+                            Operators.rotateCounter(self._current_mino, self._board)
                         case self._controls.left:
                             Operators.go_left(self._current_mino, self._board)
                         case self._controls.right:
@@ -259,7 +240,7 @@ class Tetris:
 
     def check_for_quit(self):
         if (pygame.event.peek(eventtype=pygame.QUIT)):
-            pygame.quit()
+            exit()
 
     # Game over stuff
     def game_over(self):
@@ -267,6 +248,7 @@ class Tetris:
                         appearance_range=[20, 200])
         self._screen.add_text(font_type='Calibri', font_size=65, text="Enter q to Quit", render_bool=True, color=(255, 215, 0),
                         appearance_range=[25, 265])
+        
 
         while True:
             self.check_for_quit()
@@ -275,7 +257,7 @@ class Tetris:
                 # checks for the event, and executes the function if its found in the stack. Could be extrapolated for moves as well.
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN and event.key == self._controls.quit:
-                    pygame.quit()
+                    exit()
             self.update_screen()
     
     def update_screen(self):
@@ -287,6 +269,7 @@ class Tetris:
 
     def game_over_check(self):
         if self._board.intersects(self._current_mino):
+            self._clock.stop()
             self.game_over()
 
 

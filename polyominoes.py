@@ -12,7 +12,6 @@ class Mino_Type_List:
     def new(self,previous=-1): # makes it less likely to get the same Polyominoes
         length=len(self._types)-1
         randomchoice=random.randint(0,length)
-        print(previous)
         if randomchoice==previous:
             randomnum=random.randint(0,length)
             if randomnum>previous or randomnum<previous: return self._types[randomnum]
@@ -33,6 +32,7 @@ class Tetrimino_Type_List(Mino_Type_List):
             ((1, 4, 5, 6),(1, 5, 6, 9) , (4, 5, 6, 9),(1, 4, 5, 9)),
             ((1, 2, 5, 6),(1, 2, 5, 6)),
         )
+
 class Polyomino_Type_List(Mino_Type_List):
     def __init__(self):
         self._types = (
@@ -44,12 +44,11 @@ class Polyomino_Type_List(Mino_Type_List):
             ((1, 4, 5, 6),(1, 5, 6, 9) , (4, 5, 6, 9),(1, 4, 5, 9)),
             ((1, 2, 5, 6),(1, 2, 5, 6)),
             ((1, 4, 5, 6, 9),(1, 4, 5, 6, 9)),
-            ((1, 2,3, 5, 6,7,9,10,11),(1, 2,3, 5, 6,7,9,10,11)),
+            ((0, 1,2, 4, 5,6,8,9,10),(0, 1,2, 4, 5,6,8,9,10)),
             ((1,),(1,)),
             ((1,2),(1,5)),
-            ((1,2,3,5,9),(1,2,3,7,11),(3,7,9,10,11),(1,5,9,10,11)),
-            ((1,2,3,6,10),(3,5,6,7,11),(2,6,9,10,11),(1,5,6,7,9)),
-        )
+            ((0,1,2,4,8),(0,1,2,6,10),(2,6,8,9,10),(1,4,8,9,10)),
+            ((0,1,2,5,9),(2,4,5,6,10),(1,5,8,9,10),(0,4,5,6,8)),)
 
 # Polyminos should be extended directly from mino
 class Mino:
