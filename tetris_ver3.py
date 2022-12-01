@@ -1,95 +1,7 @@
-import random
 import pygame
+from colors import Colors
+from polyominoes import Tetrimino
 
-class Colors:
-    _colors = (
-        (120, 37, 179),     # violet
-        (100, 179, 179),    # teal
-        (80, 34, 22),       # Brown
-        (80, 134, 22),      # green
-        (180, 34, 22),      # red
-        (180, 34, 122)      # purple
-    )
-
-    BLACK = (0,0,0)
-    WHITE = (255,255,255)
-    GRAY = (128, 128, 128)
-
-    def random(self):
-        return random.randint(0, len(self._colors) -1)
-
-    def select(self, index): return self._colors[index]
-
-class Tetrimino_Type_List:
-    """
-    To extend, just do _types + (new tuple list)
-    If a block's rotation doesn't change (e.g. the 2x2 block) put
-    the same rotation twice to prevent rotation methods from breaking
-    """
-    _types = (
-            ((1, 5, 9, 13), (4, 5, 6, 7)), # I block
-            ((4, 5, 9, 10), (2, 6, 5, 9)), # Z block
-            ((6, 7, 9, 10), (1, 5, 6, 10)), # S Block
-            ((1, 2, 5, 9 ), (0, 4, 5, 6), ( 1, 5, 9, 8 ), (4, 5, 6, 10)), # J block
-            ((1, 2, 6, 10), (5, 6, 7, 9), (2, 6, 10, 11), (3, 5, 6, 7)), # L blcok
-            ((1, 4, 5, 6 ), (1, 4, 5, 9), ( 4, 5, 6, 9 ), (1, 5, 6, 9)), # T block
-            ((1, 2, 5, 6), (1, 2, 5, 6)) # O block
-    )
-
-    def new(self):
-        return random.choice(self._types)
-    
-    @property
-    def type_list(self): return self._types
-
-# Polyminos should be extended directly from mino
-class Mino:
-    _type_set = None
-    _type_set_list = None
-    _color = None
-    _rotation = 0
-    _shift_x = 3
-    _shift_y = 0
-
-    def __init__(self):
-        self._color = Colors().random()
-
-    @property
-    def shift_x(self): return self._shift_x
-    @property
-    def shift_y(self): return self._shift_y
-    @shift_x.setter
-    def shift_x(self, newVal): self._shift_x = newVal
-    @shift_y.setter
-    def shift_y(self, newVal): self._shift_y = newVal
-    @property
-    def color(self): return self._color
-    @property
-    def rotation(self): return self._rotation
-    @rotation.setter
-    def rotation(self, newRotation): self._rotation = newRotation % len(self._type_set)
-
-class Tetrimino(Mino):
-    # Each tetrimino is can appear in any spot in a 4x4 holder grid
-    HOLDER_SIZE = 4
-
-    def __init__(self):
-        super().__init__()
-        self._type_set_list = Tetrimino_Type_List()
-        self._type_set = self._type_set_list.new()
-
-    def newMino(self):
-        self._type_set = self._type_set_list.new()
-        self._shift_x = 3
-        self._shift_y = 0
-        self.rotation = 0
-        self._color = Colors().random()
-
-    @property
-    def type_set(self): return self._type_set[self._rotation]
-    @property
-    def all_type_sets(self): return self._type_set
-            
 class Operators:
     def rotate(tetrimino, board):
         old_val = tetrimino.rotation
@@ -128,11 +40,12 @@ class Board:
     _field = []
     # _height, _width, _grid_square_sise, _coordinate_on_screen
 
-    def __init__(self, num_rows = 20, num_columns = 10, grid_square_size = 20, coordinate_on_screen = (0,0)):
+    def __init__(self, num_rows = 20, num_columns = 10, grid_square_size = 20, coordinate_on_screen = (0,0),colors=Colors()):
         self._height = num_rows
         self._width = num_columns
         self._grid_square_size = grid_square_size
         self._coordinate_on_screen = coordinate_on_screen
+        self._colors=colors
 
         for i in range(num_rows):
             self._field.append([-1] * num_columns)
@@ -144,8 +57,8 @@ class Board:
     def screen_coordinate(self): return self._coordinate_on_screen
 
     def draw_board(self, screen):
-        screen.fill(Colors.WHITE)
-        fill_color = Colors.GRAY
+        screen.fill(self._colors.PRIMARY)
+        fill_color = self._colors.SECONDARY
         
         for row in range(self._height):
             for column in range(self._width):
@@ -307,14 +220,15 @@ class Tetris:
     # _clock, _screen, _board, _controls
     def start(self):
         pygame.init()
-
+        self._colors=Colors()
+        self._colors.dark()
         self._clock = Tetris_Clock(fps = 25)
         self._screen = Tetris_Screen(screen_size=(400, 500))
         self._controls = Controls.default()
         self._board = Board( num_rows = 20, num_columns = 10, 
-            grid_square_size = 20, coordinate_on_screen = (100, 60))
+            grid_square_size = 20, coordinate_on_screen = (100, 60), colors=self._colors)
         self._pressing_down = False
-        self._current_mino = Tetrimino()
+        self._current_mino = Tetrimino("p")
 
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
