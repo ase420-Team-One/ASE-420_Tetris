@@ -1,23 +1,30 @@
+from SoundControl.sound import Sound as sound
+
+
 class Operators:
+
     def rotate(tetrimino, board):
+        sound.block_move()
         old_val = tetrimino.rotation
         tetrimino.rotation += 1
         if board.intersects(tetrimino):
             tetrimino.rotation = old_val
-        
-    def rotateCounter(tetrimino, board):
+
+    def rotateCounter(self, tetrimino, board):
         old_val = tetrimino.rotation
         tetrimino.rotation -= 1
         if board.intersects(tetrimino):
             tetrimino.rotation = old_val
 
     def go_left(tetrimino, board):
+        sound.block_move()
         old_val = tetrimino.shift_x
         tetrimino.shift_x -= 1
         if board.intersects(tetrimino):
             tetrimino.shift_x = old_val
 
     def go_right(tetrimino, board):
+        sound.block_move()
         old_val = tetrimino.shift_x
         tetrimino.shift_x += 1
         if board.intersects(tetrimino):
@@ -36,4 +43,4 @@ class Operators:
             tetrimino.shift_y += 1
         tetrimino.shift_y -= 1
         board.freeze(tetrimino)
-        tetrimino.newMino() 
+        tetrimino.newMino()
