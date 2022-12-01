@@ -1,5 +1,5 @@
 import random
-from Application.Themes.colors import Colors
+from Themes.colors import Colors
 
 
 class MinoTypeList:
@@ -55,7 +55,7 @@ class PolyominoTypeList(MinoTypeList):
             ((0, 1, 2, 4, 5, 6, 8, 9, 10), (0, 1, 2, 4, 5, 6, 8, 9, 10)),
             ((1,), (1,)),
             ((1, 2), (1, 5)),
-            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10), (2, 6, 8, 9, 10), (1, 4, 8, 9, 10)),
+            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10), (2, 6, 8, 9, 10), (0, 4, 8, 9, 10)),
             ((0, 1, 2, 5, 9), (2, 4, 5, 6, 10), (1, 5, 8, 9, 10), (0, 4, 5, 6, 8)),)
 
 
