@@ -32,12 +32,7 @@ class Tetrimino_Type_List(Mino_Type_List):
             ((1, 4, 5, 6),(1, 5, 6, 9) , (4, 5, 6, 9),(1, 4, 5, 9)),
             ((1, 2, 5, 6),(1, 2, 5, 6)),
         )
-        '''    
-    0  1  2  3
-    4  5  6  7
-    8  9  10 11
-    12 13 14 15
-    '''
+
 class Polyomino_Type_List(Mino_Type_List):
     def __init__(self):
         self._types = (
@@ -53,8 +48,7 @@ class Polyomino_Type_List(Mino_Type_List):
             ((1,),(1,)),
             ((1,2),(1,5)),
             ((0,1,2,4,8),(0,1,2,6,10),(2,6,8,9,10),(1,4,8,9,10)),
-            ((0,1,2,5,9),(2,4,5,6,10),(1,5,8,9,10),(0,4,5,6,8)),
-        )
+            ((0,1,2,5,9),(2,4,5,6,10),(1,5,8,9,10),(0,4,5,6,8)),)
 
 # Polyminos should be extended directly from mino
 class Mino:
