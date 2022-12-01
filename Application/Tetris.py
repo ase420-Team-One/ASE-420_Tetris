@@ -90,7 +90,15 @@ class Tetris:
 
                 if event.type == pygame.KEYUP and event.key == pygame.K_DOWN:
                     self._pressing_down = False
+
+            self.draw_board()
+            self.write_score()
             self.update_screen()
+
+    def write_score(self):
+        text = f"Score: {self._board.score}"
+        self._screen.add_text(font_type='Calibri', font_size=25, text=text, render_bool=True, color=(255, 125, 0),
+                              appearance_range=[0, 0])
 
     def check_for_quit(self):
         if (pygame.event.peek(eventtype=pygame.QUIT)):
@@ -102,7 +110,6 @@ class Tetris:
                         appearance_range=[20, 200])
         self._screen.add_text(font_type='Calibri', font_size=65, text="Enter q to Quit", render_bool=True, color=(255, 215, 0),
                         appearance_range=[25, 265])
-        
 
         while True:
             self.check_for_quit()
@@ -113,11 +120,12 @@ class Tetris:
                 if event.type == pygame.KEYDOWN and event.key == self._controls.quit:
                     exit()
             self.update_screen()
-    
-    def update_screen(self):
+
+    def draw_board(self):
         self._board.draw_board(self._screen)
         self._board.draw_figure(self._screen, self._current_mino)
 
+    def update_screen(self):
         pygame.display.flip()
         self._clock.tick()
 

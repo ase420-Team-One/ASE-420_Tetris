@@ -15,6 +15,7 @@ class Board:
         self._grid_square_size = grid_square_size
         self._coordinate_on_screen = coordinate_on_screen
         self._colors = colors
+        self.score = 0
 
         for i in range(num_rows):
             self._field.append([-1] * num_columns)
@@ -113,6 +114,8 @@ class Board:
             if is_filled:
                 lines += 1
                 self.del_row(row_num)
+
+        self.score += lines ** 2
 
     def freeze(self, current_mino):
         for row_num in range(current_mino.HOLDER_SIZE):
