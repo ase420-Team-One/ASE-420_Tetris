@@ -1,5 +1,5 @@
 import random
-from Application.Themes.colors import Colors
+from Themes.colors import Colors
 
 
 class MinoTypeList:
@@ -55,7 +55,7 @@ class PolyominoTypeList(MinoTypeList):
             ((0, 1, 2, 4, 5, 6, 8, 9, 10), (0, 1, 2, 4, 5, 6, 8, 9, 10)),
             ((1,), (1,)),
             ((1, 2), (1, 5)),
-            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10), (2, 6, 8, 9, 10), (1, 4, 8, 9, 10)),
+            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10), (2, 6, 8, 9, 10), (0, 4, 8, 9, 10)),
             ((0, 1, 2, 5, 9), (2, 4, 5, 6, 10), (1, 5, 8, 9, 10), (0, 4, 5, 6, 8)),)
 
 
@@ -97,14 +97,12 @@ class Tetrimino(Mino):  # Now also changes to polyomino list.
     # Each tetrimino is can appear in any spot in a 4x4 holder grid
     HOLDER_SIZE = 4
 
-    def __init__(self, mino):
+    def __init__(self):
         super().__init__()
-        if mino == "t":
-            self._type_set_list = TetriminoTypeList()
-        else:
-            self._type_set_list = PolyominoTypeList()
+        self._type_set_list= TetriminoTypeList()
         self._previous = None
         self._type_set = self._type_set_list.new(self._previous)
+        self._type = "t"
 
     def newMino(self):
         self._type_set = self._type_set_list.new(self._previous)
@@ -121,3 +119,10 @@ class Tetrimino(Mino):  # Now also changes to polyomino list.
     @property
     def all_type_sets(self):
         return self._type_set
+    def switchType(self):
+        if self._type =="t":
+            self._type_set_list = PolyominoTypeList()
+            self._type="p"
+        else: 
+            self._type_set_list = TetriminoTypeList()
+            self._type = "t"
