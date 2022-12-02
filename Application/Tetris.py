@@ -18,7 +18,6 @@ class TetrisScreen:
         font = pygame.font.SysFont(font_type, font_size, True, False)
         label = font.render(text, render_bool, color)
         self._screen.blit(label, appearance_range)
-        pygame.display.flip()
 
     def fill(self, color):
         self._screen.fill(color)
@@ -56,8 +55,13 @@ class Tetris:
         self._clock = TetrisClock(fps = 25)
         self._screen = TetrisScreen(screen_size=(400, 500))
         self._controls = Controls.default()
-        self._board = Board( num_rows = 20, num_columns = 10, 
-            grid_square_size = 20, coordinate_on_screen = (100, 60), colors=self._colors)
+        self._board = Board(
+            num_rows = 20,
+            num_columns = 10,
+            grid_square_size = 20,
+            coordinate_on_screen = (100, 60),
+            colors=self._colors
+        )
         self._pressing_down = False
         self._current_mino = Tetrimino("p")
 
@@ -93,12 +97,42 @@ class Tetris:
 
             self.draw_board()
             self.write_score()
+            self.update_score(self._board.score)
             self.update_screen()
 
+    def update_score(self, new_score):
+        score = self.max_score()
+
+        with open('Application/Data/scores.txt', 'w') as f:
+            if new_score > int(score):
+                f.write(str(new_score))
+            else:
+                f.write(str(score))
+
+    def max_score(self):
+        with open('Application/Data/scores.txt', 'r') as f:
+            lines = f.readlines()
+            score = lines[0].strip()
+        return score
+
     def write_score(self):
-        text = f"Score: {self._board.score}"
-        self._screen.add_text(font_type='Calibri', font_size=25, text=text, render_bool=True, color=(255, 125, 0),
-                              appearance_range=[0, 0])
+        score = f"Score: {self._board.score}"
+        self._screen.add_text(
+            font_type='Calibri',
+            font_size=25,
+            text=score,
+            render_bool=True,
+            color=(255, 125, 0),
+            appearance_range=[0, 0])
+
+        high_score = f"High Score: {self.max_score()}"
+        self._screen.add_text(
+            font_type='Calibri',
+            font_size=25,
+            text=high_score,
+            render_bool=True,
+            color=(255, 125, 0),
+            appearance_range=[0, 30])
 
     def check_for_quit(self):
         if (pygame.event.peek(eventtype=pygame.QUIT)):
