@@ -38,7 +38,8 @@ class Board:
         return self._coordinate_on_screen
 
     def draw_board(self, screen):
-        screen.fill(BackgroundColor().get_flashing_background(self._current_mino))
+        # screen.fill(BackgroundColor().get_flashing_background())
+        screen.fill(BackgroundColor().get_default_background())
         fill_color = self._colors.SECONDARY
 
         for row in range(self._height):

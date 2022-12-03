@@ -6,6 +6,7 @@ from Application.Polyominoes import Tetrimino
 from Application.Controller.operators import Operators
 from Application.Controller.Controls import Controls
 from Application.Data.Score import Score
+from Application.GameLevel.Level import Level
 
 class TetrisScreen:
     _screen = None
@@ -21,7 +22,7 @@ class TetrisScreen:
 
     def fill(self, color):
         self._screen.fill(color)
-    
+
     @property
     def screen(self): return self._screen
 
@@ -34,12 +35,26 @@ class TetrisClock:
     def __init__(self, fps = 25):
         self._fps = fps
         self._stop = False
+        self._level = 1
+
+    def get_clock_level(self):
+        return self._level
+
+    def update_clock_by_level(self, score):
+        if score > 2:
+            self._level = 2
+        if score > 4:
+            self._level = 3
+        if score > 6:
+            self._level = 4
+        if score > 8:
+            self._level = 5
 
     def tick(self):
         if not self._stop:
             self._clock.tick(self._fps)
             #always drops to 0 at appropriate time
-            self._counter = (self._counter + 1) % (self._fps // 2)
+            self._counter = (self._counter + 1) % (self._fps // self._level // 2)
     def stop(self): self._stop=True
 
     def ready_to_drop(self):
@@ -52,24 +67,26 @@ class Tetris:
         pygame.init()
         self._colors=Colors()
         self._colors.dark()
+        self._level = Level()
         self._clock = TetrisClock(fps = 25)
         self._screen = TetrisScreen(screen_size=(400, 500))
         self._controls = Controls.default()
         self._score = Score()
-        self._current_mino = Tetrimino("p")
         self._board = Board(
             num_rows = 20,
             num_columns = 10,
             grid_square_size = 20,
             coordinate_on_screen = (100, 60),
-            colors=self._colors,
-            current_mino= self._current_mino
+            colors=self._colors
         )
         self._pressing_down = False
+        self._current_mino = Tetrimino("p")
 
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
                 Operators.go_down(self._current_mino, self._board)
+                if Operators.go_down(self._current_mino, self._board) == True:
+                    print("YAYAYA")
                 self.game_over_check()
 
             self.check_for_quit()
@@ -100,6 +117,9 @@ class Tetris:
             self.draw_board()
             self._score.write_score(self._screen, self._board.score)
             self._score.update_score(self._board.score)
+
+            self._clock.update_clock_by_level(self._board.score)
+            self._level.write_level(self._screen,  self._clock)
             self.update_screen()
 
     def check_for_quit(self):
