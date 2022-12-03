@@ -85,8 +85,6 @@ class Tetris:
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
                 Operators.go_down(self._current_mino, self._board)
-                if Operators.go_down(self._current_mino, self._board) == True:
-                    print("YAYAYA")
                 self.game_over_check()
 
             self.check_for_quit()
