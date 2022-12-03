@@ -114,6 +114,9 @@ class Tetrimino(Mino):  # Now also changes to polyomino list.
         self.rotation = 0
         self._color = Colors().random()
 
+    def get_mino_color(self):
+        return self._color
+
     @property
     def type_set(self):
         return self._type_set[self._rotation]

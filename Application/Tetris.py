@@ -56,15 +56,16 @@ class Tetris:
         self._screen = TetrisScreen(screen_size=(400, 500))
         self._controls = Controls.default()
         self._score = Score()
+        self._current_mino = Tetrimino("p")
         self._board = Board(
             num_rows = 20,
             num_columns = 10,
             grid_square_size = 20,
             coordinate_on_screen = (100, 60),
-            colors=self._colors
+            colors=self._colors,
+            current_mino= self._current_mino
         )
         self._pressing_down = False
-        self._current_mino = Tetrimino("p")
 
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
