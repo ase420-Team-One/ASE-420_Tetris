@@ -1,7 +1,7 @@
 import pygame
-
 from Application.Themes.colors import Colors
 from Application.Polyominoes import Tetrimino
+from Application.Themes.BackgroundColor import BackgroundColor
 
 
 class Board:
@@ -9,13 +9,22 @@ class Board:
 
     # _height, _width, _grid_square_size, _coordinate_on_screen
 
-    def __init__(self, num_rows=20, num_columns=10, grid_square_size=20, coordinate_on_screen=(0, 0), colors=Colors()):
+    def __init__(
+            self,
+            num_rows=20,
+            num_columns=10,
+            grid_square_size=20,
+            coordinate_on_screen=(0, 0),
+            colors=Colors(),
+            current_mino=Tetrimino("p")
+    ):
         self._height = num_rows
         self._width = num_columns
         self._grid_square_size = grid_square_size
         self._coordinate_on_screen = coordinate_on_screen
         self._colors = colors
         self.score = 0
+        self._current_mino = current_mino
 
         for i in range(num_rows):
             self._field.append([-1] * num_columns)
@@ -29,7 +38,7 @@ class Board:
         return self._coordinate_on_screen
 
     def draw_board(self, screen):
-        screen.fill(self._colors.PRIMARY)
+        screen.fill(BackgroundColor().get_flashing_background(self._current_mino))
         fill_color = self._colors.SECONDARY
 
         for row in range(self._height):
