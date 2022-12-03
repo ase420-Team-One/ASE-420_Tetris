@@ -13,4 +13,4 @@ class BackgroundColor(Colors):
         mino_color = current_mino.get_mino_color()
         random_num = Colors().random()
 
-        return Colors().select_background_color(mino_color+1)
+        return Colors().select_background_color(mino_color)
