@@ -1,12 +1,12 @@
 import pygame
 
-from Application.Board.Board import Board
-from Application.Themes.colors import Colors
-from Application.Polyominoes import Tetrimino
-from Application.Controller.operators import Operators
-from Application.Controller.Controls import Controls
-from Application.Data.Score import Score
-from Application.GameLevel.Level import Level
+from Board.Board import Board
+from Themes.colors import Colors
+from Polyominoes import Tetrimino
+from Controller.operators import Operators
+from Controller.Controls import Controls
+from Data.Score import Score
+from GameLevel.Level import Level
 
 class TetrisScreen:
     _screen = None

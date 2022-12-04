@@ -1,7 +1,7 @@
 import pygame
-from Application.Themes.colors import Colors
-from Application.Polyominoes import Tetrimino
-from Application.Themes.BackgroundColor import BackgroundColor
+from Themes.colors import Colors
+from Polyominoes import Tetrimino
+from Themes.BackgroundColor import BackgroundColor
 
 
 class Board:
