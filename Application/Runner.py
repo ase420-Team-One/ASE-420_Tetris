@@ -1,4 +1,4 @@
-from Application.Tetris import Tetris
+from Tetris import Tetris
 
 
 def main():

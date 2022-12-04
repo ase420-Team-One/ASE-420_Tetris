@@ -1,5 +1,5 @@
 import random
-from Application.Themes.colors import Colors
+from Themes.colors import Colors
 
 
 class MinoTypeList:

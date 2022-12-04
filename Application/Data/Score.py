@@ -5,14 +5,14 @@ class Score:
     def update_score(self, new_score):
         score = self.max_score()
 
-        with open('Application/Data/scores.txt', 'w') as f:
+        with open('Data/scores.txt', 'w') as f:
             if new_score > int(score):
                 f.write(str(new_score))
             else:
                 f.write(str(score))
 
     def max_score(self):
-        with open('Application/Data/scores.txt', 'r') as f:
+        with open('Data/scores.txt', 'r') as f:
             lines = f.readlines()
             score = lines[0].strip()
         return score

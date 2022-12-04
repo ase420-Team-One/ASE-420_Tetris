@@ -1,10 +1,10 @@
-from Application.Themes.colors import Colors
+from Themes.colors import Colors
 
 
 class BackgroundColor(Colors):
     def __init__(self):
         super().__init__()
-        self._default = Colors().SECONDARY
+        self._default = Colors().PRIMARY
 
     def get_default_background(self):
         return self._default
