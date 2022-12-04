@@ -16,7 +16,7 @@ class Board:
             grid_square_size=20,
             coordinate_on_screen=(0, 0),
             colors=Colors(),
-            current_mino=Tetrimino("p")
+            current_mino=Tetrimino()
     ):
         self._height = num_rows
         self._width = num_columns
