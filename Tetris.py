@@ -7,6 +7,9 @@ from Controller.operators import Operators
 from Controller.Controls import Controls
 from Data.Score import Score
 from GameLevel.Level import Level
+from GridControl.grid import GridInputText
+from SpeedControl.speed import SpeedInputText
+from SoundControl.sound import Sound as sound
 
 class TetrisScreen:
     _screen = None
@@ -68,19 +71,22 @@ class Tetris:
         self._colors=Colors()
         self._colors.dark()
         self._level = Level()
-        self._clock = TetrisClock(fps = 25)
+        GRIDUSER_INP = GridInputText.gridTextbox()
+        SPEEDUSER_INP = SpeedInputText.speedTextbox()
+        self._clock = TetrisClock(fps=int(SPEEDUSER_INP))
         self._screen = TetrisScreen(screen_size=(400, 500))
         self._controls = Controls.default()
         self._score = Score()
         self._board = Board(
-            num_rows = 20,
-            num_columns = 10,
+            num_rows=int(GRIDUSER_INP[0]),
+            num_columns=int(GRIDUSER_INP[1]),
             grid_square_size = 20,
             coordinate_on_screen = (100, 60),
             colors=self._colors
         )
         self._pressing_down = False
         self._current_mino = Tetrimino()
+        sound.game_start()
 
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
@@ -105,6 +111,7 @@ class Tetris:
                         case self._controls.down:
                             # can probably be extracted, this feels horribly inefficient
                             self._pressing_down = True
+                            sound.block_move()
                         case self._controls.drop:
                             Operators.drop(self._current_mino, self._board)
                             self.game_over_check()
@@ -137,6 +144,7 @@ class Tetris:
                 # If so, Maybe consolidate those into a method that takes an event type and function
                 # checks for the event, and executes the function if its found in the stack. Could be extrapolated for moves as well.
             for event in pygame.event.get():
+                sound.game_end()
                 if event.type == pygame.KEYDOWN and event.key == self._controls.quit:
                     exit()
             self.update_screen()
