@@ -80,7 +80,7 @@ class Tetris:
             colors=self._colors
         )
         self._pressing_down = False
-        self._current_mino = Tetrimino("p")
+        self._current_mino = Tetrimino()
 
         while True:
             if self._clock.ready_to_drop() or self._pressing_down:
@@ -153,3 +153,5 @@ class Tetris:
         if self._board.intersects(self._current_mino):
             self._clock.stop()
             self.game_over()
+    def minoSwitch(self): # Added for switching mino types.
+        self._current_mino.switchType()
