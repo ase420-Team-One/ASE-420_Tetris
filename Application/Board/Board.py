@@ -1,7 +1,8 @@
 import pygame
-from Application.Themes.colors import Colors
-from Application.Polyominoes import Tetrimino
-from Application.Themes.BackgroundColor import BackgroundColor
+from Themes.colors import Colors
+from Polyominoes import Tetrimino
+from Themes.BackgroundColor import BackgroundColor
+from SoundControl.sound import Sound as sound
 
 
 class Board:
@@ -45,12 +46,15 @@ class Board:
         for row in range(self._height):
             for column in range(self._width):
                 field_value = self._field[row][column]
-                rect_left = self._coordinate_on_screen[0] + self._grid_square_size * column
-                rect_top = self._coordinate_on_screen[1] + self._grid_square_size * row
+                rect_left = self._coordinate_on_screen[0] + \
+                    self._grid_square_size * column
+                rect_top = self._coordinate_on_screen[1] + \
+                    self._grid_square_size * row
                 height = self._grid_square_size
                 width = self._grid_square_size
 
-                pygame.draw.rect(screen.screen, fill_color, [rect_left, rect_top, width, height], 1)
+                pygame.draw.rect(screen.screen, fill_color, [
+                                 rect_left, rect_top, width, height], 1)
                 if field_value > -1:
                     pygame.draw.rect(screen.screen, Colors().select(field_value),
                                      [rect_left + 1, rect_top + 1, width - 2, height - 2])
@@ -61,8 +65,9 @@ class Board:
                 pixel = row * 4 + column
                 if pixel in tetrimino.type_set:
                     rect_left = self._coordinate_on_screen[0] + self._grid_square_size * (
-                                column + tetrimino.shift_x) + 1
-                    rect_top = self._coordinate_on_screen[1] + self._grid_square_size * (row + tetrimino.shift_y) + 1
+                        column + tetrimino.shift_x) + 1
+                    rect_top = self._coordinate_on_screen[1] + self._grid_square_size * (
+                        row + tetrimino.shift_y) + 1
                     inner_colored_square_edge_size = self._grid_square_size - 2
                     pygame.draw.rect(screen.screen, Colors().select(tetrimino.color),
                                      [rect_left, rect_top, inner_colored_square_edge_size,
@@ -131,7 +136,9 @@ class Board:
         for row_num in range(current_mino.HOLDER_SIZE):
             for col_num in range(current_mino.HOLDER_SIZE):
                 if (row_num * current_mino.HOLDER_SIZE + col_num) in current_mino.type_set:
-                    self._field[row_num + current_mino.shift_y][col_num + current_mino.shift_x] = current_mino.color
+                    self._field[row_num + current_mino.shift_y][col_num +
+                                                                current_mino.shift_x] = current_mino.color
+        sound.block_place()
         self.break_lines()
 
         """

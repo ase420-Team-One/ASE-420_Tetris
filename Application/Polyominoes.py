@@ -1,5 +1,5 @@
 import random
-from Application.Themes.colors import Colors
+from Themes.colors import Colors
 
 
 class MinoTypeList:
@@ -17,7 +17,8 @@ class MinoTypeList:
         randomchoice = random.randint(0, length)
         if randomchoice == previous:
             randomnum = random.randint(0, length)
-            if randomnum > previous or randomnum < previous: return self._types[randomnum]
+            if randomnum > previous or randomnum < previous:
+                return self._types[randomnum]
         return self._types[randomchoice]
 
     def indexOf(self, choice):
@@ -55,7 +56,8 @@ class PolyominoTypeList(MinoTypeList):
             ((0, 1, 2, 4, 5, 6, 8, 9, 10), (0, 1, 2, 4, 5, 6, 8, 9, 10)),
             ((1,), (1,)),
             ((1, 2), (1, 5)),
-            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10), (2, 6, 8, 9, 10), (1, 4, 8, 9, 10)),
+            ((0, 1, 2, 4, 8), (0, 1, 2, 6, 10),
+             (2, 6, 8, 9, 10), (1, 4, 8, 9, 10)),
             ((0, 1, 2, 5, 9), (2, 4, 5, 6, 10), (1, 5, 8, 9, 10), (0, 4, 5, 6, 8)),)
 
 
@@ -90,7 +92,8 @@ class Mino:
     def rotation(self): return self._rotation
 
     @rotation.setter
-    def rotation(self, newRotation): self._rotation = newRotation % len(self._type_set)
+    def rotation(self, newRotation): self._rotation = newRotation % len(
+        self._type_set)
 
 
 class Tetrimino(Mino):  # Now also changes to polyomino list.
