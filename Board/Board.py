@@ -2,7 +2,7 @@ import pygame
 from Themes.colors import Colors
 from Polyominoes import Tetrimino
 from Themes.BackgroundColor import BackgroundColor
-
+from SoundControl.sound import Sound as sound
 
 class Board:
     _field = []
@@ -132,6 +132,7 @@ class Board:
             for col_num in range(current_mino.HOLDER_SIZE):
                 if (row_num * current_mino.HOLDER_SIZE + col_num) in current_mino.type_set:
                     self._field[row_num + current_mino.shift_y][col_num + current_mino.shift_x] = current_mino.color
+        sound.block_place()
         self.break_lines()
 
         """
