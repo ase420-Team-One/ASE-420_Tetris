@@ -4,6 +4,14 @@ from tkinter import simpledialog
 from tkinter import *
 
 
+speed_dict =  {
+    "Slow": 15,
+    "Slowish": 20,
+    "Normal": 25,
+    "Faster": 30,
+    "Fastest": 35,
+}
+
 class SpeedInputText(object):
     def speedTextbox():
         ROOT = tk.Tk()

@@ -16,7 +16,8 @@ class Board:
             grid_square_size=20,
             coordinate_on_screen=(0, 0),
             colors=Colors(),
-            current_mino=Tetrimino()
+            current_mino=Tetrimino(),
+            sound = sound(True)
     ):
         self._height = num_rows
         self._width = num_columns
@@ -25,6 +26,7 @@ class Board:
         self._colors = colors
         self.score = 0
         self._current_mino = current_mino
+        self._sound = sound
 
         for i in range(num_rows):
             self._field.append([-1] * num_columns)
@@ -132,7 +134,7 @@ class Board:
             for col_num in range(current_mino.HOLDER_SIZE):
                 if (row_num * current_mino.HOLDER_SIZE + col_num) in current_mino.type_set:
                     self._field[row_num + current_mino.shift_y][col_num + current_mino.shift_x] = current_mino.color
-        sound.block_place()
+        self._sound.block_place()
         self.break_lines()
 
         """

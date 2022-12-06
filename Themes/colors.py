@@ -2,10 +2,9 @@ import random
 
 
 class Colors:
-    def __init__(self):
-        self.SECONDARY = (0,0,0)
-        self.PRIMARY = (255,255,255)
-        self.TERTIARY = (128, 128, 128)
+    def __init__(self, is_dark_mode : bool = True):
+        mode = self.dark if is_dark_mode else self.light
+        mode()
 
     _colors = (
         (250, 78, 233),     # purple pizzazz

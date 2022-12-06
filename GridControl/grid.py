@@ -3,6 +3,15 @@ from tkinter import simpledialog
 # Import module
 from tkinter import *
 
+
+grid_dict= {
+    "Large" : (600, 700),
+    "Largish": (500, 600),
+    "Normal": (400, 500),
+    "Smallish": (300, 400),
+    "Small": (200, 300),
+}
+
 class GridInputText(object):
     def gridTextbox():
         # we need pressing_down, fps, and counter to go_down() the Tetris Figure
