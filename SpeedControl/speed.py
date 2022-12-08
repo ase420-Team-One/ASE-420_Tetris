@@ -12,6 +12,7 @@ speed_dict =  {
     "Fastest": 35,
 }
 
+#Display an input dialog box for user to change speed value (self.fps in main file)
 class SpeedInputText(object):
     def speedTextbox():
         ROOT = tk.Tk()
