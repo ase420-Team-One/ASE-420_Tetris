@@ -11,7 +11,7 @@ grid_dict= {
     "Smallish": (300, 400),
     "Small": (200, 300),
 }
-
+#Display an input dialog box for user to change the grid size (num_rows and num_colums of the Board object)
 class GridInputText(object):
     def gridTextbox():
         # we need pressing_down, fps, and counter to go_down() the Tetris Figure
