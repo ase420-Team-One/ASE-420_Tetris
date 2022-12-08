@@ -10,16 +10,16 @@ class Sound(object):
         """ because pygame can be be compiled without mixer.
     """
         self._state.load_sound(file)
-
+    #Called when game initializes
     def game_start(self):
         self._state.game_start()
-
+    #Called when user moves a piece
     def block_move(self):
         self._state.block_move()
-
+    #Called when a piece is placed upon the board
     def block_place(self):
         self._state.block_place()
-
+    #Called when the game has ended
     def game_end(self):
         self._state.game_end()
 
