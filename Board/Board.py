@@ -4,6 +4,7 @@ from Polyominoes import Tetrimino
 from Themes.BackgroundColor import BackgroundColor
 from SoundControl.sound import Sound as sound
 
+
 class Board:
     _field = []
 
@@ -17,7 +18,7 @@ class Board:
             coordinate_on_screen=(0, 0),
             colors=Colors(),
             current_mino=Tetrimino(),
-            sound = sound(True)
+            sound=sound(True)
     ):
         self._height = num_rows
         self._width = num_columns
@@ -27,13 +28,14 @@ class Board:
         self.score = 0
         self._current_mino = current_mino
         self._sound = sound
+        self._background_colors = BackgroundColor(self._colors.is_dark_mode)
 
         for i in range(num_rows):
             self._field.append([-1] * num_columns)
 
     @property
     def size(self):
-        return (self._height, self._width)
+        return self._height, self._width
 
     @property
     def screen_coordinate(self):
@@ -41,7 +43,7 @@ class Board:
 
     def draw_board(self, screen):
         # screen.fill(BackgroundColor().get_flashing_background())
-        screen.fill(BackgroundColor().get_default_background())
+        screen.fill(self._background_colors.get_default_background())
         fill_color = self._colors.SECONDARY
 
         for row in range(self._height):
@@ -54,7 +56,7 @@ class Board:
 
                 pygame.draw.rect(screen.screen, fill_color, [rect_left, rect_top, width, height], 1)
                 if field_value > -1:
-                    pygame.draw.rect(screen.screen, Colors().select(field_value),
+                    pygame.draw.rect(screen.screen, self._colors.select(field_value),
                                      [rect_left + 1, rect_top + 1, width - 2, height - 2])
 
     def draw_figure(self, screen, tetrimino):
@@ -63,10 +65,10 @@ class Board:
                 pixel = row * 4 + column
                 if pixel in tetrimino.type_set:
                     rect_left = self._coordinate_on_screen[0] + self._grid_square_size * (
-                                column + tetrimino.shift_x) + 1
+                            column + tetrimino.shift_x) + 1
                     rect_top = self._coordinate_on_screen[1] + self._grid_square_size * (row + tetrimino.shift_y) + 1
                     inner_colored_square_edge_size = self._grid_square_size - 2
-                    pygame.draw.rect(screen.screen, Colors().select(tetrimino.color),
+                    pygame.draw.rect(screen.screen, self._colors.select(tetrimino.color),
                                      [rect_left, rect_top, inner_colored_square_edge_size,
                                       inner_colored_square_edge_size])
 

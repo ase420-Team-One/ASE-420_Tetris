@@ -1,13 +1,15 @@
 class Level:
-    def __init__(self):
-        self.level = 1
+    def __init__(self, level = 0):
+        self.level = level
+        self._score_modifier = 1 + self.level
 
     def update_level(self, score):
-        if score > 3:
+        _score = score + self._score_modifier
+        if _score > 3:
             self.level = 2
-        if score > 6:
+        if _score > 6:
             self.level = 3
-        if score > 9:
+        if _score > 9:
             self.level = 4
 
     def get_level(self):
@@ -22,3 +24,12 @@ class Level:
             render_bool=True,
             color=(255, 125, 0),
             appearance_range=[0, 60])
+
+    @staticmethod
+    def level_from_setting(string: str):
+        return {
+            "None" : 1,
+            "Level 1": 2,
+            "Level 2": 3,
+            "Level 3": 4
+        }.get(string)

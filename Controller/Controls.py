@@ -85,16 +85,6 @@ class PygameScheme(ControlScheme):
         return dict(zip(ControlScheme.key_list(), PygameScheme.default_keys()))
 
 
-class Controls:
-    @staticmethod
-    def default():
-        return Controls.generate()
-
-    @staticmethod
-    def generate(scheme: ControlScheme = PygameScheme()):
-        return ControlMap(scheme)
-
-
 class ControlMap:
     def __init__(self, scheme: ControlScheme, operators: Operators):
         keys = scheme.key_list()
@@ -103,7 +93,6 @@ class ControlMap:
         operator_functions = (operators.go_down, operators.drop, operators.go_left, operators.go_right,
                                operators.rotate, operators.rotateCounter)
         self._commands = dict(zip(self._keys.values(), operator_functions))
-        print(self._commands)
 
     def __contains__(self, item):
         return item in self._commands

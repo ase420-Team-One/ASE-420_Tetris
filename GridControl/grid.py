@@ -3,15 +3,6 @@ from tkinter import simpledialog
 # Import module
 from tkinter import *
 
-
-grid_dict= {
-    "Large" : (600, 700),
-    "Largish": (500, 600),
-    "Normal": (400, 500),
-    "Smallish": (300, 400),
-    "Small": (200, 300),
-}
-#Display an input dialog box for user to change the grid size (num_rows and num_colums of the Board object)
 class GridInputText(object):
     def gridTextbox():
         # we need pressing_down, fps, and counter to go_down() the Tetris Figure
@@ -24,6 +15,16 @@ class GridInputText(object):
         COLUMNUSER_INP = simpledialog.askstring(
             title="Change grid column size", prompt="Change grid column size")
         return [ROWUSER_INP, COLUMNUSER_INP]
+
+
+grid_dict= {
+    "Large" : (600, 700),
+    "Largish": (500, 600),
+    "Normal": (400, 500),
+    "Smallish": (300, 400),
+    "Small": (200, 300),
+}
+
 
 
 """

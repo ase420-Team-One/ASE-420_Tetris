@@ -1,13 +1,11 @@
 import pygame
 
 from Board.Board import Board
-from Themes.colors import Colors
-from Polyominoes import Tetrimino
-from Controller.operators import Operators
-from Controller.Controls import Controls
 from Data.Score import Score
 from GameLevel.Level import Level
-from SoundControl.sound import Sound as sound
+from Polyominoes import Tetrimino
+from Themes.colors import Colors
+
 
 class TetrisScreen:
     _screen = None
@@ -33,7 +31,7 @@ class TetrisClock:
     _fps = None
     _counter = 0
 
-    def __init__(self, fps = 25):
+    def __init__(self, fps=25):
         self._fps = fps
         self._stop = False
         self._level = 1
@@ -54,9 +52,11 @@ class TetrisClock:
     def tick(self):
         if not self._stop:
             self._clock.tick(self._fps)
-            #always drops to 0 at appropriate time
+            # always drops to 0 at appropriate time
             self._counter = (self._counter + 1) % (self._fps // self._level // 2)
-    def stop(self): self._stop=True
+
+    def stop(self):
+        self._stop = True
 
     def ready_to_drop(self):
         return self._counter == 0
@@ -64,28 +64,31 @@ class TetrisClock:
 
 class Tetris:
     # _clock, _screen, _board, _controls
-    def start(self, is_dark_mode, grid_user_input, speed_user_input, control_map, soundvar, ops):
+    def start(self, settings, control_map, soundvar, ops):
         pygame.init()
-        self._colors=Colors(is_dark_mode)
-        self._colors.dark()
-        self._level = Level()
-        # GRIDUSER_INP = grid_user_input # GridInputText.gridTextbox()
-        SPEEDUSER_INP = speed_user_input # SpeedInputText.speedTextbox()
-        self._clock = TetrisClock(fps=int(SPEEDUSER_INP)) #
+        self._colors = Colors(settings.dark_mode)
+        self._level = Level(settings.starting_level) # starting level
+        GRIDUSER_INP = settings.grid_size # GridInputText.gridTextbox()
+        SPEEDUSER_INP = settings.speed  # SpeedInputText.speedTextbox()
+        self._clock = TetrisClock(fps=int(SPEEDUSER_INP))  #
         self._screen = TetrisScreen(screen_size=(500, 600))
-        self._controls = control_map
         self._score = Score()
+        self._controls = control_map
         self._board = Board(
-            grid_square_size = 20,
-            coordinate_on_screen = (100, 60),
+            grid_square_size=20,
+            coordinate_on_screen=(100, 60),
             colors=self._colors,
             sound=soundvar
         )
         self._sound = soundvar
         self._pressing_down = False
         self._current_mino = Tetrimino()
+        
+        if settings.polyminos:
+            self.minoSwitch()
+
         self._sound.game_start()
-        self._operators =  ops
+        self._operators = ops
         self.main_loop()
 
     def main_loop(self):
@@ -102,7 +105,7 @@ class Tetris:
             self.draw_board()
             self._score.write_score(self._screen, self._board.score)
             self._clock.update_clock_by_level(self._board.score)
-            self._level.write_level(self._screen,  self._clock)
+            self._level.write_level(self._screen, self._clock)
             self.update_screen()
 
     def process_event(self, event: pygame.event):
@@ -118,21 +121,23 @@ class Tetris:
             self._pressing_down = False
 
     def check_for_quit(self):
-        if (pygame.event.peek(eventtype=pygame.QUIT)):
+        if pygame.event.peek(eventtype=pygame.QUIT):
             exit()
 
     # Game over stuff
     def game_over(self):
-        self._screen.add_text(font_type='Calibri', font_size=65, text="Game Over", render_bool=True, color=(255, 125, 0),
-                        appearance_range=[20, 200])
-        self._screen.add_text(font_type='Calibri', font_size=65, text="Enter q to Quit", render_bool=True, color=(255, 215, 0),
-                        appearance_range=[25, 265])
+        self._screen.add_text(font_type='Calibri', font_size=65, text="Game Over", render_bool=True,
+                              color=(255, 125, 0),
+                              appearance_range=[20, 200])
+        self._screen.add_text(font_type='Calibri', font_size=65, text="Enter q to Quit", render_bool=True,
+                              color=(255, 215, 0),
+                              appearance_range=[25, 265])
 
         while True:
             self.check_for_quit()
-            # TODO may be able to extract the following into a method similar to check for quit?
-                # If so, Maybe consolidate those into a method that takes an event type and function
-                # checks for the event, and executes the function if its found in the stack. Could be extrapolated for moves as well.
+            # TODO may be able to extract the following into a method similar to check for quit? If so,
+            #  Maybe consolidate those into a method that takes an event type and function checks for the event,
+            #  and executes the function if its found in the stack. Could be extrapolated for moves as well.
             for event in pygame.event.get():
                 self._sound.game_end()
                 if event.type == pygame.KEYDOWN and event.key == self._controls.quit:
@@ -151,5 +156,6 @@ class Tetris:
         if self._board.intersects(self._current_mino):
             self._clock.stop()
             self.game_over()
-    def minoSwitch(self): # Added for switching mino types.
+
+    def minoSwitch(self):  # Added for switching mino types.
         self._current_mino.switchType()

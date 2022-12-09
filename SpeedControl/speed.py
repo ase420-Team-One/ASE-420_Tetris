@@ -3,16 +3,6 @@ from tkinter import simpledialog
 # Import module
 from tkinter import *
 
-
-speed_dict =  {
-    "Slow": 15,
-    "Slowish": 20,
-    "Normal": 25,
-    "Faster": 30,
-    "Fastest": 35,
-}
-
-#Display an input dialog box for user to change speed value (self.fps in main file)
 class SpeedInputText(object):
     def speedTextbox():
         ROOT = tk.Tk()
@@ -22,6 +12,16 @@ class SpeedInputText(object):
         SPEEDUSER_INP = simpledialog.askstring(
             title="Change speed", prompt="Choose speed value:")
         return SPEEDUSER_INP
+
+
+speed_dict =  {
+    "Slow": 15,
+    "Slowish": 20,
+    "Normal": 25,
+    "Faster": 30,
+    "Fastest": 35,
+}
+
 
 
 """

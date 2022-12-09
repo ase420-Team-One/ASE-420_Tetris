@@ -1,8 +1,7 @@
 from Menus.MainMenu import MainMenu, MainMenuBuilder
+from Menus.Variables.SettingsVariable import SettingsVariable
 from Tetris import Tetris
 from Controller.Controls import *
-from SpeedControl.speed import speed_dict
-from GridControl.grid import grid_dict
 from SoundControl.sound import Sound as sound
 
 
@@ -11,9 +10,6 @@ class Launcher:
         self._main_menu = MainMenu(MainMenuBuilder, self._start)
 
     def launch(self):
-        self._construct()
-
-    def _construct(self):
         self._main_menu.construct()
         self._main_menu.display()
 
@@ -29,17 +25,13 @@ class Launcher:
         
         zipped_controls = dict(zip(ControlScheme.key_list(), control_vars))
         pygame_scheme = TkScheme.custom(zipped_controls).to_pygame_scheme()
-        sound_var = sound(vars["ck_Sound"].get())
+        settings = SettingsVariable(vars)
+        sound_var = sound(settings.sound)
         ops = Operators(sound_var)
         control_map = ControlMap(pygame_scheme, ops)
-
-
-        print(vars)
         
         Tetris().start(
-            is_dark_mode = vars["ck_Dark Mode"].get(), 
-            grid_user_input= grid_dict[vars["cb_Grid Size"].get()],
-            speed_user_input= speed_dict[vars["cb_Speed"].get()], 
+            settings = settings, 
             control_map=control_map,
             soundvar = sound_var,
             ops = ops)

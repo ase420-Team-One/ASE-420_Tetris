@@ -1,5 +1,3 @@
-from SoundControl.sound import Sound as sound
-
 class Operators:
     def __init__(self, soundvar):
         self._sound = soundvar
